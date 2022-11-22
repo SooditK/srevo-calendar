@@ -224,10 +224,8 @@ export const DayButton = styled.button<DayButtonProps>`
           span {
             position: relative;
             &::after {
-              content: "";
+              content: "•";
               background: ${(props) => props.theme.indicatorColor};
-              height: 2px;
-              width: 2px;
               position: absolute;
               bottom: -2px;
               left: 0;
