@@ -225,9 +225,16 @@ export const DayButton = styled.button<DayButtonProps>`
             position: relative;
             &::after {
               content: "•";
-              background: ${(props) => props.theme.indicatorColor};
-              position: absolute;
-              bottom: -2px;
+              background: ${props.theme.indicatorColor};
+              border-radius: 50%;
+              color: ${(props) => props.theme.indicatorColor};
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              margin: 0 auto;
+              height: 8px;
+              width: 8px;
+              bottom: -15px;
               left: 0;
             }
           }
