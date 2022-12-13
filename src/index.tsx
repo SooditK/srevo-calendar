@@ -4,7 +4,12 @@ import helperFunctions from "./helpers/functions";
 import translations from "./helpers/translations";
 
 import { Props } from "./typings";
-import { CHEVRON_ICON_SVG, CLOCK_ICON_SVG, DETAILS_ICON_SVG, SIDEBAR_ICON_SVG } from "./helpers/consts";
+import {
+  CHEVRON_ICON_SVG,
+  CLOCK_ICON_SVG,
+  DETAILS_ICON_SVG,
+  SIDEBAR_ICON_SVG,
+} from "./helpers/consts";
 
 import { ThemeProvider } from "styled-components";
 import {
@@ -51,10 +56,10 @@ const RevoCalendar = ({
   detailDateFormat = "DD/MM/YYYY",
   languages = translations,
   date = new Date(),
-  dateSelected = () => { },
-  eventSelected = () => { },
-  addEvent = () => { },
-  deleteEvent = () => { },
+  dateSelected = () => {},
+  eventSelected = () => {},
+  addEvent = () => {},
+  deleteEvent = () => {},
 }: Props) => {
   // TRANSFORM ANY PASSED COLOR FORMAT INTO RGB.
   const primaryColorRGB = helperFunctions.getRGBColor(primaryColor);
@@ -74,7 +79,9 @@ const RevoCalendar = ({
           setSize(calendarRef.current.offsetWidth);
         }
       }
-      if (typeof window !== "undefined") { window.addEventListener("resize", updateSize); }
+      if (typeof window !== "undefined") {
+        window.addEventListener("resize", updateSize);
+      }
       updateSize();
       return () => window.removeEventListener("resize", updateSize);
     }, [calendarRef.current]);
@@ -87,15 +94,20 @@ const RevoCalendar = ({
   if (calendarWidth <= 320 + sidebarWidth + detailWidth) {
     onePanelAtATime = true;
     // IF BOTH SIDEBAR AND DETAIL PANELS ARE SET TO BE OPEN BY DEFAULT, SIDEBAR WILL HAVE PRIORITY.
-    if (sidebarDefault && detailDefault) { detailDefault = false; }
+    if (sidebarDefault && detailDefault) {
+      detailDefault = false;
+    }
   }
 
   // IN ORDER TO MAKE IT RESPONSIBLE, PANELS WILL FLOAT ON TOP OF CALENDAR ON LOW RES.
-  const floatingPanels = calendarWidth <= 320 + sidebarWidth || calendarWidth <= 320 + detailWidth;
+  const floatingPanels =
+    calendarWidth <= 320 + sidebarWidth || calendarWidth <= 320 + detailWidth;
 
   // IF, WITH THE CURRENT SETTING, THE SIDEBAR OR DETAIL PANELS WON'T FIT THE SCREEN, MAKE THEM SMALLER.
-  sidebarWidth = calendarWidth < sidebarWidth + 50 ? calendarWidth - 50 : sidebarWidth;
-  detailWidth = calendarWidth < detailWidth + 50 ? calendarWidth - 50 : detailWidth;
+  sidebarWidth =
+    calendarWidth < sidebarWidth + 50 ? calendarWidth - 50 : sidebarWidth;
+  detailWidth =
+    calendarWidth < detailWidth + 50 ? calendarWidth - 50 : detailWidth;
 
   // USE TODAY AS DEFAULT SELECTED DATE IF PASSED DATE IS INVALID.
   if (!helperFunctions.isValidDate(date)) {
@@ -122,7 +134,11 @@ const RevoCalendar = ({
 
   // CLOSE DETAILS IF CAN'T FIT IT ANYMORE AFTER RESIZING.
   useEffect(() => {
-    if (sidebarOpen && detailsOpen && calendarWidth <= 320 + sidebarWidth + detailWidth) {
+    if (
+      sidebarOpen &&
+      detailsOpen &&
+      calendarWidth <= 320 + sidebarWidth + detailWidth
+    ) {
       animatingDetail = -1;
       setDetailsState(false);
     }
@@ -212,7 +228,10 @@ const RevoCalendar = ({
               {languages[lang].months.map((month: string, i: number) => {
                 return (
                   <li key={i}>
-                    <MonthButton current={i === currentMonth} onClick={() => setMonth(i)}>
+                    <MonthButton
+                      current={i === currentMonth}
+                      onClick={() => setMonth(i)}
+                    >
                       {month}
                     </MonthButton>
                   </li>
@@ -299,7 +318,33 @@ const RevoCalendar = ({
           }
         }}
       >
-        <h1>{languages[lang].months[currentMonth]}</h1>
+        <span>
+          <button
+            onClick={() => {
+              if (currentMonth - 1 >= 0) {
+                setMonth(currentMonth - 1);
+              } else {
+                setMonth(11);
+                setYear(currentYear - 1);
+              }
+            }}
+          >
+            {"<"}
+          </button>
+          <h1>{languages[lang].months[currentMonth]}</h1>
+          <button
+            onClick={() => {
+              if (currentMonth + 1 < 12) {
+                setMonth(currentMonth + 1);
+              } else {
+                setMonth(0);
+                setYear(currentYear + 1);
+              }
+            }}
+          >
+            {">"}
+          </button>
+        </span>
         <div>
           <div>
             {languages[lang].daysShort.map((weekDay: string) => {
@@ -312,7 +357,12 @@ const RevoCalendar = ({
                 <Day
                   firstDay={i === 0}
                   key={i}
-                  firstOfMonth={helperFunctions.getFirstWeekDayOfMonth(currentMonth, currentYear) + 1}
+                  firstOfMonth={
+                    helperFunctions.getFirstWeekDayOfMonth(
+                      currentMonth,
+                      currentYear
+                    ) + 1
+                  }
                 >
                   {day}
                 </Day>
@@ -363,16 +413,28 @@ const RevoCalendar = ({
       var tempDate = new Date(events[index].date);
       tempDate.setHours(0, 0, 0, 0);
 
-      if (helperFunctions.isValidDate(eventDate) && tempDate.getTime() === selectedDate.getTime()) {
+      if (
+        helperFunctions.isValidDate(eventDate) &&
+        tempDate.getTime() === selectedDate.getTime()
+      ) {
         const event = (
-          <Event key={index} onClick={() => toggleDeleteButton(index)} role="button">
+          <Event
+            key={index}
+            onClick={() => toggleDeleteButton(index)}
+            role="button"
+          >
             <p>{events[index].name}</p>
             <div>
               {events[index].allDay ? (
                 <>
                   {showAllDayLabel && (
                     <div aria-label={languages[lang].eventTime}>
-                      <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                      >
                         <path fill={primaryColorRGB} d={CLOCK_ICON_SVG} />
                       </svg>
                       <span>{languages[lang].allDay}</span>
@@ -384,19 +446,28 @@ const RevoCalendar = ({
                   <svg width="20" height="20" viewBox="0 0 24 24">
                     <path fill={primaryColorRGB} d={CLOCK_ICON_SVG} />
                   </svg>
-                  <span>{helperFunctions.getFormattedTime(eventDate, timeFormat24)}</span>
+                  <span>
+                    {helperFunctions.getFormattedTime(eventDate, timeFormat24)}
+                  </span>
                 </div>
               )}
               {events[index].extra && (
                 <div>
                   <svg width="20" height="20" viewBox="0 0 24 24">
-                    <path fill={primaryColorRGB} d={events[index].extra?.icon} />
+                    <path
+                      fill={primaryColorRGB}
+                      d={events[index].extra?.icon}
+                    />
                   </svg>
                   <span>{events[index].extra?.text}</span>
                 </div>
               )}
             </div>
-            {showDelete === index && <button onClick={() => deleteEvent(index)}>{languages[lang].delete}</button>}
+            {showDelete === index && (
+              <button onClick={() => deleteEvent(index)}>
+                {languages[lang].delete}
+              </button>
+            )}
           </Event>
         );
         eventDivs.push(event);
@@ -418,9 +489,18 @@ const RevoCalendar = ({
           onAnimationEnd={animationEnd}
         >
           <div>
-            {helperFunctions.getFormattedDate(selectedDate, detailDateFormat, lang, languages)}
+            {helperFunctions.getFormattedDate(
+              selectedDate,
+              detailDateFormat,
+              lang,
+              languages
+            )}
             {allowAddEvent && (
-              <button onClick={() => addEvent(new Date(currentYear, currentMonth, currentDay))}>
+              <button
+                onClick={() =>
+                  addEvent(new Date(currentYear, currentMonth, currentDay))
+                }
+              >
                 {languages[lang].addEvent}
               </button>
             )}
@@ -455,7 +535,10 @@ const RevoCalendar = ({
     <ThemeProvider
       theme={{
         primaryColor: primaryColorRGB,
-        primaryColor50: helperFunctions.getRGBAColorWithAlpha(primaryColorRGB, 0.5),
+        primaryColor50: helperFunctions.getRGBAColorWithAlpha(
+          primaryColorRGB,
+          0.5
+        ),
         secondaryColor: secondaryColorRGB,
         todayColor: todayColorRGB,
         textColor: textColorRGB,

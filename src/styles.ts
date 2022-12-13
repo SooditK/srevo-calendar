@@ -265,12 +265,28 @@ export const Inner = styled.div`
       grid-template-columns: repeat(7, minmax(30px, 1fr));
     }
   }
-  & > h1 {
+  & > span > h1 {
     text-align: center;
-    margin-bottom: 1rem;
-    padding-bottom: 10px;
     color: ${(props) => props.theme.textColor};
     font-size: min(1.5rem, 7vw);
+  }
+  & > span {
+    display: flex;
+    margin-bottom: 1rem;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+  & > span > button {
+    border: none;
+    background: none;
+    color: ${(props) => props.theme.textColor};
+    font-size: min(1.5rem, 5vw);
+    cursor: pointer;
+    &:hover {
+      color: ${(props) => props.theme.primaryColor};
+    }
   }
 `;
 
